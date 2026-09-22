@@ -1,0 +1,21 @@
+[
+  {
+    "listing": "/projects/index.html",
+    "items": [
+      "/projects/ed-alert/index.html",
+      "/projects/alicante-housing/index.html"
+    ]
+  },
+  {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/posts/reproducible-blog-quarto-uv/index.html"
+    ]
+  },
+  {
+    "listing": "/index.html",
+    "items": [
+      "/blog/posts/reproducible-blog-quarto-uv/index.html"
+    ]
+  }
+]

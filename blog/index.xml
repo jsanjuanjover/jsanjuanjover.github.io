@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Jordi Sanjuan Jover</title>
+<link>https://jsanjuanjover.github.io/blog/</link>
+<atom:link href="https://jsanjuanjover.github.io/blog/index.xml" rel="self" type="application/rss+xml"/>
+<description>Data Scientist working on applied machine learning and deep learning.</description>
+<generator>quarto-1.10.18</generator>
+<lastBuildDate>Tue, 22 Sep 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>How this blog runs your code and still builds in CI</title>
+  <link>https://jsanjuanjover.github.io/blog/posts/reproducible-blog-quarto-uv/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Most static site generators treat code as text to display. I wanted the opposite: posts where the chart is produced by the code shown next to it, so a figure cannot quietly drift away from the analysis that made it.</p>
+<p>Quarto does that. A <code>.qmd</code> file is Markdown plus executable blocks, and a rendered page is the result of running them. Jupyter notebooks work too, with no conversion step.</p>
+<section id="the-problem-that-setup-creates" class="level2">
+<h2 class="anchored" data-anchor-id="the-problem-that-setup-creates">The problem that setup creates</h2>
+<p>If posts execute Python, the build server needs Python. And not just Python — the same versions of the same libraries, and sometimes the data, or the build fails on a machine that is not mine. That is a brittle dependency to hang a personal site on.</p>
+<p>The fix is one line of configuration:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">execute</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span></span>
+<span id="cb1-2"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">freeze</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> auto</span></span></code></pre></div></div>
+<p>With <code>freeze</code>, Quarto executes code locally and stores the results in <code>_freeze/</code>, which is committed to the repository. Continuous integration then renders the site from those stored results. It installs Quarto and nothing else — no Python, no libraries, no data. Code is re-executed only when I change the document that contains it.</p>
+<p>So the environment lives in exactly one place: my machine, pinned with <a href="https://docs.astral.sh/uv/">uv</a>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb2-1"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">requires-python</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"&gt;=3.12"</span></span>
+<span id="cb2-2"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">dependencies</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"jupyter&gt;=1.1"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"pandas&gt;=2.2"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matplotlib&gt;=3.9"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span></span></code></pre></div></div>
+</section>
+<section id="proof-it-actually-executes" class="level2">
+<h2 class="anchored" data-anchor-id="proof-it-actually-executes">Proof it actually executes</h2>
+<p>The figure below is not an image file. It is drawn when this page is rendered, from the SHAP importances of my <a href="../../../projects/alicante-housing/index.html">Alicante housing market analysis</a> — the five features that move property prices the most in that dataset.</p>
+<div id="cell-fig-shap" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> plt</span>
+<span id="cb3-2"></span>
+<span id="cb3-3">features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Sea views"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Elevator"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Longitude"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Latitude"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Surface area (m²)"</span>]</span>
+<span id="cb3-4">importance <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.08</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.08</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.13</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.13</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.31</span>]</span>
+<span id="cb3-5"></span>
+<span id="cb3-6">SURFACE, SERIES, INK, MUTED <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#fcfcfb"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#2a78d6"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#0b0b0b"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#52514e"</span></span>
+<span id="cb3-7"></span>
+<span id="cb3-8">fig, ax <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> plt.subplots(figsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3.1</span>), facecolor<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>SURFACE)</span>
+<span id="cb3-9">ax.set_facecolor(SURFACE)</span>
+<span id="cb3-10">bars <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> ax.barh(features, importance, height<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.55</span>, color<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>SERIES)</span>
+<span id="cb3-11"></span>
+<span id="cb3-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Direct labels replace the x-axis: five bars do not need a scale.</span></span>
+<span id="cb3-13"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> bar, value <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">zip</span>(bars, importance):</span>
+<span id="cb3-14">    ax.text(value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.007</span>, bar.get_y() <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> bar.get_height() <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>value<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:.2f}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>,</span>
+<span id="cb3-15">            va<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"center"</span>, ha<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"left"</span>, color<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>MUTED, fontsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>)</span>
+<span id="cb3-16"></span>
+<span id="cb3-17">ax.set_xlim(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.37</span>)</span>
+<span id="cb3-18">ax.set_xticks([])</span>
+<span id="cb3-19">ax.tick_params(axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y"</span>, length<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, colors<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>INK, labelsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">11</span>)</span>
+<span id="cb3-20"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> side <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> (<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"top"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"right"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bottom"</span>):</span>
+<span id="cb3-21">    ax.spines[side].set_visible(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)</span>
+<span id="cb3-22">ax.spines[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"left"</span>].set_color(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#d8d8d4"</span>)</span>
+<span id="cb3-23"></span>
+<span id="cb3-24">plt.tight_layout()</span>
+<span id="cb3-25">plt.show()</span></code></pre></div></div>
+<div class="cell-output cell-output-display">
+<div id="fig-shap" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Horizontal bar chart. Surface area leads at 0.31, latitude and longitude follow at 0.13 each, elevator and sea views at 0.08.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-shap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://jsanjuanjover.github.io/blog/posts/reproducible-blog-quarto-uv/index_files/figure-html/fig-shap-output-1.png" alt="Horizontal bar chart. Surface area leads at 0.31, latitude and longitude follow at 0.13 each, elevator and sea views at 0.08." width="657" height="288" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-shap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: SHAP importance of the five strongest price drivers in the Alicante housing dataset (1,802 listings).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Surface area dominates, but latitude and longitude together carry just as much weight — in Alicante, location is not a tiebreaker between similar flats, it is a primary driver of price.</p>
+</section>
+<section id="what-the-pipeline-looks-like-end-to-end" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-pipeline-looks-like-end-to-end">What the pipeline looks like end to end</h2>
+<ol type="1">
+<li>Write a post, run <code>quarto preview</code>, see it execute locally.</li>
+<li>Commit the post <strong>and</strong> <code>_freeze/</code>.</li>
+<li>GitHub Actions installs Quarto, renders, and publishes to GitHub Pages.</li>
+</ol>
+<p>The build is fast because nothing is computed twice, and it is reproducible because what CI publishes is exactly what I saw locally.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>Quarto</category>
+  <category>uv</category>
+  <category>CI/CD</category>
+  <category>Reproducibility</category>
+  <guid>https://jsanjuanjover.github.io/blog/posts/reproducible-blog-quarto-uv/</guid>
+  <pubDate>Tue, 22 Sep 2026 00:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>

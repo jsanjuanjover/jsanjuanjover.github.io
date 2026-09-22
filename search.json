@@ -1,0 +1,198 @@
+[
+  {
+    "objectID": "projects/index.html",
+    "href": "projects/index.html",
+    "title": "Projects",
+    "section": "",
+    "text": "ED-Alert\n\n\n\nPython\n\nRandom Forest\n\nMCA\n\nTableau\n\nEducation\n\nPublic data\n\n\n\nEarly detection of school dropout risk from PISA 2022 data, combining MCA, logistic regression and Random Forest — delivered as an interactive Tableau story for guidance counsellors.\n\n\n\n\n\nJune 2026\n\n\n\n\n\n\n\nAlicante Housing Market Analysis\n\n\n\nPython\n\nXGBoost\n\nSHAP\n\nGeospatial\n\nWeb scraping\n\nOpen data\n\n\n\nAn end-to-end pipeline over 1,802 property listings — scraping, geocoding, gradient boosting with SHAP and hypothesis testing — released as an open dataset with a DOI.\n\n\n\n\n\nMay 2026\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "projects/alicante-housing/index.html",
+    "href": "projects/alicante-housing/index.html",
+    "title": "Alicante Housing Market Analysis",
+    "section": "",
+    "text": "Repository Dataset (DOI)"
+  },
+  {
+    "objectID": "projects/alicante-housing/index.html#the-question",
+    "href": "projects/alicante-housing/index.html#the-question",
+    "title": "Alicante Housing Market Analysis",
+    "section": "The question",
+    "text": "The question\nWhat actually drives housing prices in Alicante — size, location, or amenities? Everyone has an intuition about this; few have the numbers. I wanted an answer that came out of data I had collected myself, and that could be checked by anyone else."
+  },
+  {
+    "objectID": "projects/alicante-housing/index.html#the-data",
+    "href": "projects/alicante-housing/index.html#the-data",
+    "title": "Alicante Housing Market Analysis",
+    "section": "The data",
+    "text": "The data\nThere was no ready-made dataset, so the project starts one step earlier than usual: collecting it. I scraped 1,802 listings from Idealista, Spain’s largest property portal, capturing eleven variables per listing — price, property type, surface area, rooms, floor, agency, and the amenities that agents advertise (garage, sea views, elevator, terrace).\nAddresses on a property portal are deliberately vague, so location had to be reconstructed: each listing was geocoded through Nominatim (OpenStreetMap), resolving roughly 87% of them to coordinates. That step is what turned “location” from a text field into something a model could use.\nThe result is published on Zenodo under CC BY-NC-SA 4.0, with a DOI, so the analysis below can be reproduced rather than taken on trust."
+  },
+  {
+    "objectID": "projects/alicante-housing/index.html#the-method",
+    "href": "projects/alicante-housing/index.html#the-method",
+    "title": "Alicante Housing Market Analysis",
+    "section": "The method",
+    "text": "The method\nThe pipeline runs in six stages: scraping with Selenium, cleaning and outlier handling in Pandas, geospatial enrichment with geopy, unsupervised exploration with UMAP, supervised modelling with XGBoost, and formal hypothesis testing.\nTwo choices are worth explaining. SHAP was used on top of XGBoost because a price model that cannot say why it predicts a price is useless for the people asking the question. And the amenity claims were put through Mann-Whitney U rather than a t-test, because property prices are heavily skewed and do not meet the normality assumption — a detail that quietly invalidates a lot of published property analysis."
+  },
+  {
+    "objectID": "projects/alicante-housing/index.html#what-came-out",
+    "href": "projects/alicante-housing/index.html#what-came-out",
+    "title": "Alicante Housing Market Analysis",
+    "section": "What came out",
+    "text": "What came out\nSurface area dominates, as expected, but not by as much as the market narrative suggests:\n\n\n\nFactor\nSHAP importance\nReading\n\n\n\n\nSurface area (m²)\n0.31\nThe strongest single predictor\n\n\nLatitude\n0.13\nProximity to the coast pushes price up\n\n\nLongitude\n0.13\nEast-facing locations command a premium\n\n\nElevator\n0.08\nSignificant positive effect\n\n\nSea views\n0.08\nSignificant positive effect\n\n\n\nTaken together, the two geographic coordinates carry about as much weight as surface area — location is not a tiebreaker in this market, it is a primary driver.\nOn amenities, listings with a garage are systematically priced higher (Mann-Whitney U, p ≈ 0.000), and the effect holds independently of the other features. UMAP clustering separated the market into distinct segments by property type and geographic zone, which is the part a buyer or an agency would use in practice: the city is not one market but several."
+  },
+  {
+    "objectID": "projects/alicante-housing/index.html#stack",
+    "href": "projects/alicante-housing/index.html#stack",
+    "title": "Alicante Housing Market Analysis",
+    "section": "Stack",
+    "text": "Stack\nPython · Selenium · Pandas · NumPy · geopy/Nominatim · Scikit-learn · XGBoost · SHAP · UMAP · SciPy · Matplotlib · Seaborn · Git"
+  },
+  {
+    "objectID": "cv.html",
+    "href": "cv.html",
+    "title": "Jordi Sanjuan Jover",
+    "section": "",
+    "text": "Valencia, Spain · j.sanjuanjover@gmail.com · linkedin.com/in/jsanjuanj · github.com/jsanjuanjover\nDownload as PDF"
+  },
+  {
+    "objectID": "cv.html#profile",
+    "href": "cv.html#profile",
+    "title": "Jordi Sanjuan Jover",
+    "section": "Profile",
+    "text": "Profile\nData Scientist trained at the Universitat Oberta de Catalunya, focused on applied machine learning and artificial intelligence, with published end-to-end projects: predictive models on educational data, an open housing dataset with a DOI, and human activity recognition from sensor data. Ten years translating complex information into decisions for non-technical teams across clinical, sports and teaching settings led me to specialise in data as the basis for decision-making. Interested in machine learning and deep learning applied to problems with measurable consequences."
+  },
+  {
+    "objectID": "cv.html#technical-skills",
+    "href": "cv.html#technical-skills",
+    "title": "Jordi Sanjuan Jover",
+    "section": "Technical skills",
+    "text": "Technical skills\nLanguages — Python, SQL, R\nTools — Git, CI/CD, Docker\nLibraries — Pandas, NumPy, Matplotlib, Scikit-learn\nMachine learning — linear and logistic regression, classification (XGBoost, Random Forest, SVM, KNN), clustering (K-means, DBSCAN), time series\nDeep learning — TensorFlow, PyTorch, CNN, RNN, Hugging Face Transformers, BERT, embeddings, NER"
+  },
+  {
+    "objectID": "cv.html#projects",
+    "href": "cv.html#projects",
+    "title": "Jordi Sanjuan Jover",
+    "section": "Projects",
+    "text": "Projects\n\nHuman Activity Recognition from IMU Sensors\n\nPython, PyTorch, Scikit-learn · MSc thesis, UOC · 2026\n\n\nActivity classification from accelerometer and gyroscope time series: preprocessing, signal windowing and feature extraction.\nBenchmarking of classical models against neural network architectures.\n\n\n\nAlicante Housing Market Analysis\n\nPython, Pandas, SQL, Selenium, Scikit-learn · 2026 · Zenodo\n\n\nEnd-to-end data pipeline on 1,802 property listings: collection, cleaning, geocoding and geospatial enrichment.\nMarket segmentation into price clusters and identification of the key drivers of property value.\nReleased as an open dataset with a DOI.\n\n\n\nED-Alert\n\nPython, Pandas, Scikit-learn, Tableau · 2026 · Tableau Public\n\n\nAnalysis of early school leaving across Spanish regions and against Europe (ELET indicator), combined with PISA 2022 data.\nIdentification of the strongest predictors of dropout risk using Random Forest, and detection of natural student groupings with MCA.\nInteractive Tableau visualisation for vocational-training guidance counsellors."
+  },
+  {
+    "objectID": "cv.html#experience",
+    "href": "cv.html#experience",
+    "title": "Jordi Sanjuan Jover",
+    "section": "Experience",
+    "text": "Experience\n\nVocational Education Teacher, Healthcare\n\nGeneralitat Valenciana · Valencia, Spain · October 2022 – August 2026\n\n\nDesigned and led a teaching innovation project connecting the healthcare vocational curriculum with the working environment. Coordinated a five-person working group; over 100 students took part in its first year.\nTechnical communication of complex content to non-specialist audiences.\nGroup management and assessment based on performance indicators.\n\n\n\nSports Physiotherapist\n\nClub Bàsquet Alginet, LEB Plata · Alginet, Spain · September 2019 – May 2024\n\n\nHead of the physiotherapy area, managing one physiotherapist and interns.\nBuilt an injury recovery tracking system in Excel — structured intake forms for athletes and a reporting dashboard for the coaching staff — reaching 100% squad availability in the 2020–21 season and over 90% in the following ones.\nDecision-making and communication within a multidisciplinary performance team of coaching staff, strength and conditioning, and medical services.\n\n\n\nSports Physiotherapist\n\nClub Handbol Canyamelar (Liga Guerreras Iberdrola) and Club Bàsquet Claret (Liga Femenina 2), 2018–2019 · Tatami Rugby Club (División de Honor B), 2014–2016\n\n\nFull squad coverage at three clubs competing in national leagues: systematic injury logging and weekly availability tracking.\n\n\n\nClinical Physiotherapist\n\nClínica Axis, Cabinet Paramédical Linet and Corpo Sano Fisioterapia · Valencia, Spain and Épernon, France · 2014–2022\n\n\nAutonomous management of a caseload of 120 patients.\nTwo years practising in France, working entirely in French."
+  },
+  {
+    "objectID": "cv.html#education",
+    "href": "cv.html#education",
+    "title": "Jordi Sanjuan Jover",
+    "section": "Education",
+    "text": "Education\n\nMSc in Data Science\n\nUniversitat Oberta de Catalunya · September 2025 – December 2026 · GPA 7.4/10\n\n\n\nBSc in Physiotherapy\n\nUniversitat de València · 2010–2014 · GPA 7.49/10\n\n\n\nCertifications\n\nGoogle Project Management Professional Certificate — Coursera, 2026\n\n\n\nFurther postgraduate study\n\nMSc in Sports Physiotherapy and Return to Play — Universitat Autònoma de Barcelona, 2019–2020\nMSc in Secondary Education Teaching — Universitat de València, 2018–2019"
+  },
+  {
+    "objectID": "cv.html#languages",
+    "href": "cv.html#languages",
+    "title": "Jordi Sanjuan Jover",
+    "section": "Languages",
+    "text": "Languages\nSpanish and Valencian native · French C1 equivalent · English B2, Pearson Certificate"
+  },
+  {
+    "objectID": "blog/index.html",
+    "href": "blog/index.html",
+    "title": "Blog",
+    "section": "",
+    "text": "How this blog runs your code and still builds in CI\n\n\n\nQuarto\n\nuv\n\nCI/CD\n\nReproducibility\n\n\n\nQuarto for executable posts, uv for the environment, and frozen output so the build server never needs either.\n\n\n\n\n\n22 September 2026\n\n3 min\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "blog/posts/reproducible-blog-quarto-uv/index.html",
+    "href": "blog/posts/reproducible-blog-quarto-uv/index.html",
+    "title": "How this blog runs your code and still builds in CI",
+    "section": "",
+    "text": "Most static site generators treat code as text to display. I wanted the opposite: posts where the chart is produced by the code shown next to it, so a figure cannot quietly drift away from the analysis that made it.\nQuarto does that. A .qmd file is Markdown plus executable blocks, and a rendered page is the result of running them. Jupyter notebooks work too, with no conversion step."
+  },
+  {
+    "objectID": "blog/posts/reproducible-blog-quarto-uv/index.html#the-problem-that-setup-creates",
+    "href": "blog/posts/reproducible-blog-quarto-uv/index.html#the-problem-that-setup-creates",
+    "title": "How this blog runs your code and still builds in CI",
+    "section": "The problem that setup creates",
+    "text": "The problem that setup creates\nIf posts execute Python, the build server needs Python. And not just Python — the same versions of the same libraries, and sometimes the data, or the build fails on a machine that is not mine. That is a brittle dependency to hang a personal site on.\nThe fix is one line of configuration:\nexecute:\n  freeze: auto\nWith freeze, Quarto executes code locally and stores the results in _freeze/, which is committed to the repository. Continuous integration then renders the site from those stored results. It installs Quarto and nothing else — no Python, no libraries, no data. Code is re-executed only when I change the document that contains it.\nSo the environment lives in exactly one place: my machine, pinned with uv.\nrequires-python = \"&gt;=3.12\"\ndependencies = [\"jupyter&gt;=1.1\", \"pandas&gt;=2.2\", \"matplotlib&gt;=3.9\"]"
+  },
+  {
+    "objectID": "blog/posts/reproducible-blog-quarto-uv/index.html#proof-it-actually-executes",
+    "href": "blog/posts/reproducible-blog-quarto-uv/index.html#proof-it-actually-executes",
+    "title": "How this blog runs your code and still builds in CI",
+    "section": "Proof it actually executes",
+    "text": "Proof it actually executes\nThe figure below is not an image file. It is drawn when this page is rendered, from the SHAP importances of my Alicante housing market analysis — the five features that move property prices the most in that dataset.\n\nimport matplotlib.pyplot as plt\n\nfeatures = [\"Sea views\", \"Elevator\", \"Longitude\", \"Latitude\", \"Surface area (m²)\"]\nimportance = [0.08, 0.08, 0.13, 0.13, 0.31]\n\nSURFACE, SERIES, INK, MUTED = \"#fcfcfb\", \"#2a78d6\", \"#0b0b0b\", \"#52514e\"\n\nfig, ax = plt.subplots(figsize=(7, 3.1), facecolor=SURFACE)\nax.set_facecolor(SURFACE)\nbars = ax.barh(features, importance, height=0.55, color=SERIES)\n\n# Direct labels replace the x-axis: five bars do not need a scale.\nfor bar, value in zip(bars, importance):\n    ax.text(value + 0.007, bar.get_y() + bar.get_height() / 2, f\"{value:.2f}\",\n            va=\"center\", ha=\"left\", color=MUTED, fontsize=10)\n\nax.set_xlim(0, 0.37)\nax.set_xticks([])\nax.tick_params(axis=\"y\", length=0, colors=INK, labelsize=11)\nfor side in (\"top\", \"right\", \"bottom\"):\n    ax.spines[side].set_visible(False)\nax.spines[\"left\"].set_color(\"#d8d8d4\")\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\nFigure 1: SHAP importance of the five strongest price drivers in the Alicante housing dataset (1,802 listings).\n\n\n\n\n\nSurface area dominates, but latitude and longitude together carry just as much weight — in Alicante, location is not a tiebreaker between similar flats, it is a primary driver of price."
+  },
+  {
+    "objectID": "blog/posts/reproducible-blog-quarto-uv/index.html#what-the-pipeline-looks-like-end-to-end",
+    "href": "blog/posts/reproducible-blog-quarto-uv/index.html#what-the-pipeline-looks-like-end-to-end",
+    "title": "How this blog runs your code and still builds in CI",
+    "section": "What the pipeline looks like end to end",
+    "text": "What the pipeline looks like end to end\n\nWrite a post, run quarto preview, see it execute locally.\nCommit the post and _freeze/.\nGitHub Actions installs Quarto, renders, and publishes to GitHub Pages.\n\nThe build is fast because nothing is computed twice, and it is reproducible because what CI publishes is exactly what I saw locally."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Jordi Sanjuan Jover",
+    "section": "",
+    "text": "I am a data scientist based in Valencia, Spain, finishing an MSc in Data Science at the Universitat Oberta de Catalunya. I work on applied machine learning and deep learning: predictive models on educational data, an open housing dataset published with a DOI, and human activity recognition from sensor time series.\nBefore data, I spent ten years as a physiotherapist and a vocational teacher, turning complex information into decisions for people without a technical background — in clinics, in professional sport and in the classroom. That is still the part of the work I care about most: a model nobody can act on is not finished."
+  },
+  {
+    "objectID": "index.html#selected-projects",
+    "href": "index.html#selected-projects",
+    "title": "Jordi Sanjuan Jover",
+    "section": "Selected projects",
+    "text": "Selected projects\nAlicante Housing Market Analysis — an end-to-end pipeline over 1,802 property listings, from scraping to geospatial enrichment, gradient boosting with SHAP and hypothesis testing. Released as an open dataset with a DOI.\nED-Alert — early school leaving across Spanish regions against the European ELET indicator, combined with PISA 2022 data to surface the strongest predictors of dropout risk. Delivered as an interactive Tableau story for guidance counsellors.\nSee all projects →"
+  },
+  {
+    "objectID": "index.html#latest-posts",
+    "href": "index.html#latest-posts",
+    "title": "Jordi Sanjuan Jover",
+    "section": "Latest posts",
+    "text": "Latest posts\n\n\n\n\n\nHow this blog runs your code and still builds in CI\n\n\nQuarto for executable posts, uv for the environment, and frozen output so the build server never needs either.\n\n\n\n\n\nSep 22, 2026\n\n\n\n\n\nNo matching items\n\nRead the blog →"
+  },
+  {
+    "objectID": "projects/ed-alert/index.html",
+    "href": "projects/ed-alert/index.html",
+    "title": "ED-Alert",
+    "section": "",
+    "text": "Repository Interactive story"
+  },
+  {
+    "objectID": "projects/ed-alert/index.html#the-question",
+    "href": "projects/ed-alert/index.html#the-question",
+    "title": "ED-Alert",
+    "section": "The question",
+    "text": "The question\nSpain has one of the highest early school leaving rates in Europe. The aggregate figure is well known; what is far less clear is which students are at risk, and on what evidence a guidance counsellor could act before a student drops out rather than after.\nThis project had a specific audience from the start: vocational-training guidance counsellors, who are not statisticians and who need something they can open, explore and use in a meeting."
+  },
+  {
+    "objectID": "projects/ed-alert/index.html#the-data",
+    "href": "projects/ed-alert/index.html#the-data",
+    "title": "ED-Alert",
+    "section": "The data",
+    "text": "The data\nThree sources, deliberately combined:\n\nPISA 2022 student questionnaires — the international assessment run by the OECD. The source file is a 2 GB SPSS export, which drives most of the preprocessing work.\nELET indicator by autonomous community, to place each Spanish region against the European benchmark.\nSpanish Ministry of Education figures on vocational-training dropout.\n\nThe target variable, en_riesgo, was constructed from student performance across the three PISA competences, rather than taken off the shelf. That definition is a modelling decision, not a given, and it is the one I would challenge first if someone disagreed with the results."
+  },
+  {
+    "objectID": "projects/ed-alert/index.html#the-method",
+    "href": "projects/ed-alert/index.html#the-method",
+    "title": "ED-Alert",
+    "section": "The method",
+    "text": "The method\nContext variables in PISA are overwhelmingly categorical — family situation, school resources, attitudes — which rules out the usual correlation-first approach. Multiple Correspondence Analysis was used to reduce that categorical space and reveal natural groupings of students.\nTwo models were then trained side by side, for different reasons. Logistic regression gives a counsellor something explainable: coefficients that can be defended in a conversation with a family. Random Forest gives better detection. Both were judged on recall in the risk class rather than on overall accuracy, because in this problem a missed at-risk student costs far more than a false alarm."
+  },
+  {
+    "objectID": "projects/ed-alert/index.html#what-came-out",
+    "href": "projects/ed-alert/index.html#what-came-out",
+    "title": "ED-Alert",
+    "section": "What came out",
+    "text": "What came out\n\n\n\nModel\nOverall accuracy\nRecall, risk class\n\n\n\n\nLogistic regression\n—\n60%\n\n\nRandom Forest\n81%\n64%\n\n\n\nThe gap between 81% accuracy and 64% recall is the honest headline here: the model is considerably better at confirming that a student is fine than at catching one who is not. For a screening tool that is the wrong way round, and it is the first thing I would work on with more data.\nMCA surfaced coherent student profiles that map onto the risk classification, which matters more than the model scores for the intended use: counsellors recognise the profiles, and recognising them is what turns a number into a conversation.\nThe whole analysis was delivered as an interactive Tableau story rather than a report, so the audience can filter to their own region and cohort instead of reading about someone else’s."
+  },
+  {
+    "objectID": "projects/ed-alert/index.html#stack",
+    "href": "projects/ed-alert/index.html#stack",
+    "title": "ED-Alert",
+    "section": "Stack",
+    "text": "Stack\nPython · Pandas · NumPy · Scikit-learn · prince (MCA) · Matplotlib · Seaborn · Tableau"
+  }
+]
