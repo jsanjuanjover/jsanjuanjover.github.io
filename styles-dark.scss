@@ -1,0 +1,78 @@
+/*-- scss:defaults --*/
+
+$font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto,
+  "Helvetica Neue", Arial, sans-serif !default;
+$font-family-monospace: ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+  Consolas, "Liberation Mono", monospace !default;
+
+$primary: #6ea8f0;
+$body-bg: #14181d;
+$body-color: #d4dae1;
+$link-color: $primary;
+
+$font-size-root: 17px;
+$h1-font-size: 2.1rem;
+$h2-font-size: 1.5rem;
+$h3-font-size: 1.15rem;
+
+/*-- scss:rules --*/
+
+body {
+  line-height: 1.65;
+}
+
+.navbar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+main p,
+main li {
+  max-width: 68ch;
+}
+
+h2 {
+  margin-top: 2.2rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cv-contact {
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.cv-meta {
+  color: #9aa5b1;
+  font-size: 0.93rem;
+  margin: 0.1rem 0 0.4rem;
+}
+
+.cv-entry {
+  margin-top: 1.4rem;
+  margin-bottom: 0.2rem;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.quarto-listing {
+  margin-top: 1.5rem;
+}
+
+.quarto-post .listing-title {
+  font-size: 1.2rem;
+}
+
+.listing-description {
+  max-width: 68ch;
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.2rem 0 1.8rem;
+}
+
+.project-links .btn {
+  font-size: 0.9rem;
+}

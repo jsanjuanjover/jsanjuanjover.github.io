@@ -1,0 +1,19 @@
+# Source material kept local: the CV in data/ contains a personal phone number
+# that must never reach the public repository.
+data/
+
+# Quarto build output
+_site/
+.quarto/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+
+/.quarto/
+**/*.quarto_ipynb

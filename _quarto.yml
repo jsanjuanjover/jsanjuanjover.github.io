@@ -1,0 +1,58 @@
+project:
+  type: website
+  output-dir: _site
+  # Explicit render list. data/ holds the source CV, which contains a personal
+  # phone number: it must never be rendered into the published site.
+  render:
+    - "**/*.qmd"
+    - "!data/**"
+
+# Executed code is frozen into _freeze/ and committed, so CI renders the site
+# without needing Python, the data, or matching library versions.
+# Re-execution happens locally, only for documents you actually change.
+execute:
+  freeze: auto
+
+lang: en
+
+website:
+  title: "Jordi Sanjuan Jover"
+  description: "Data Scientist working on applied machine learning and deep learning."
+  site-url: "https://jsanjuanjover.github.io"
+  favicon: assets/favicon.svg
+  open-graph: true
+  twitter-card: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: projects/index.qmd
+        text: Projects
+      - href: blog/index.qmd
+        text: Blog
+      - href: cv.qmd
+        text: CV
+    right:
+      - icon: github
+        href: https://github.com/jsanjuanjover
+        aria-label: GitHub
+      - icon: linkedin
+        href: https://www.linkedin.com/in/jsanjuanj
+        aria-label: LinkedIn
+      - icon: envelope
+        href: "mailto:j.sanjuanjover@gmail.com"
+        aria-label: Email
+  page-footer:
+    left: "&copy; 2026 Jordi Sanjuan Jover"
+    right: "Built with [Quarto](https://quarto.org)"
+
+format:
+  html:
+    theme:
+      light: [cosmo, styles.scss]
+      dark: [darkly, styles-dark.scss]
+    toc: true
+    code-copy: true
+    code-overflow: wrap
+    code-link: true
+    link-external-newwindow: true
