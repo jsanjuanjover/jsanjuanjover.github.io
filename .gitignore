@@ -17,3 +17,6 @@ __pycache__/
 
 /.quarto/
 **/*.quarto_ipynb
+
+# Local working notes, deliberately unpublished
+ESTADO.md
