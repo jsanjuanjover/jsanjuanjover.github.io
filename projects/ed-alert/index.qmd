@@ -1,0 +1,81 @@
+---
+title: "ED-Alert"
+description: >
+  Early detection of school dropout risk from PISA 2022 data, combining MCA,
+  logistic regression and Random Forest — delivered as an interactive Tableau
+  story for guidance counsellors.
+date: 2026-06-08
+categories: [Python, Random Forest, MCA, Tableau, Education, Public data]
+---
+
+::: {.project-links}
+[Repository](https://github.com/jsanjuanjover/ED-Alert-visualizaci-n-abandono-escolar){.btn .btn-outline-primary .btn-sm}
+[Interactive story](https://public.tableau.com/app/profile/jordi.sanjuan.jover/viz/PR2_Visualizacion-ED_Alert/Historia1){.btn .btn-outline-primary .btn-sm}
+:::
+
+## The question
+
+Spain has one of the highest early school leaving rates in Europe. The aggregate
+figure is well known; what is far less clear is *which students* are at risk,
+and on what evidence a guidance counsellor could act before a student drops out
+rather than after.
+
+This project had a specific audience from the start: vocational-training
+guidance counsellors, who are not statisticians and who need something they can
+open, explore and use in a meeting.
+
+## The data
+
+Three sources, deliberately combined:
+
+- **PISA 2022** student questionnaires — the international assessment run by the
+  OECD. The source file is a 2 GB SPSS export, which drives most of the
+  preprocessing work.
+- **ELET indicator** by autonomous community, to place each Spanish region
+  against the European benchmark.
+- **Spanish Ministry of Education** figures on vocational-training dropout.
+
+The target variable, `en_riesgo`, was constructed from student performance
+across the three PISA competences, rather than taken off the shelf. That
+definition is a modelling decision, not a given, and it is the one I would
+challenge first if someone disagreed with the results.
+
+## The method
+
+Context variables in PISA are overwhelmingly categorical — family situation,
+school resources, attitudes — which rules out the usual correlation-first
+approach. **Multiple Correspondence Analysis** was used to reduce that
+categorical space and reveal natural groupings of students.
+
+Two models were then trained side by side, for different reasons. **Logistic
+regression** gives a counsellor something explainable: coefficients that can be
+defended in a conversation with a family. **Random Forest** gives better
+detection. Both were judged on recall in the risk class rather than on overall
+accuracy, because in this problem a missed at-risk student costs far more than
+a false alarm.
+
+## What came out
+
+| Model | Overall accuracy | Recall, risk class |
+|---|---|---|
+| Logistic regression | — | 60% |
+| Random Forest | 81% | 64% |
+
+The gap between 81% accuracy and 64% recall is the honest headline here: the
+model is considerably better at confirming that a student is fine than at
+catching one who is not. For a screening tool that is the wrong way round, and
+it is the first thing I would work on with more data.
+
+MCA surfaced coherent student profiles that map onto the risk classification,
+which matters more than the model scores for the intended use: counsellors
+recognise the profiles, and recognising them is what turns a number into a
+conversation.
+
+The whole analysis was delivered as an interactive Tableau story rather than a
+report, so the audience can filter to their own region and cohort instead of
+reading about someone else's.
+
+## Stack
+
+Python · Pandas · NumPy · Scikit-learn · prince (MCA) · Matplotlib · Seaborn ·
+Tableau

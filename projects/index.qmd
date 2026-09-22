@@ -1,0 +1,12 @@
+---
+title: "Projects"
+subtitle: "End-to-end data science work, from raw data to a decision someone can act on."
+listing:
+  contents: "*/index.qmd"
+  type: default
+  sort: "date desc"
+  categories: true
+  fields: [title, description, categories, date]
+  date-format: "MMMM YYYY"
+toc: false
+---

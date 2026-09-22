@@ -1,0 +1,164 @@
+---
+title: "Jordi Sanjuan Jover"
+subtitle: "Data Scientist · Python · SQL · Machine Learning · Deep Learning"
+format:
+  html:
+    toc: true
+    toc-location: right
+  typst:
+    papersize: a4
+    fontsize: 10pt
+    margin:
+      x: 1.6cm
+      y: 1.5cm
+---
+
+::: {.cv-contact}
+Valencia, Spain ·
+[j.sanjuanjover@gmail.com](mailto:j.sanjuanjover@gmail.com) ·
+[linkedin.com/in/jsanjuanj](https://www.linkedin.com/in/jsanjuanj) ·
+[github.com/jsanjuanjover](https://github.com/jsanjuanjover)
+:::
+
+::: {.content-visible when-format="html"}
+[Download as PDF](cv.pdf){.btn .btn-outline-primary .btn-sm}
+:::
+
+## Profile
+
+Data Scientist trained at the Universitat Oberta de Catalunya, focused on applied
+machine learning and artificial intelligence, with published end-to-end projects:
+predictive models on educational data, an open housing dataset with a DOI, and
+human activity recognition from sensor data. Ten years translating complex
+information into decisions for non-technical teams across clinical, sports and
+teaching settings led me to specialise in data as the basis for decision-making.
+Interested in machine learning and deep learning applied to problems with
+measurable consequences.
+
+## Technical skills
+
+**Languages** — Python, SQL, R
+
+**Tools** — Git, CI/CD, Docker
+
+**Libraries** — Pandas, NumPy, Matplotlib, Scikit-learn
+
+**Machine learning** — linear and logistic regression, classification (XGBoost,
+Random Forest, SVM, KNN), clustering (K-means, DBSCAN), time series
+
+**Deep learning** — TensorFlow, PyTorch, CNN, RNN, Hugging Face Transformers,
+BERT, embeddings, NER
+
+## Projects
+
+### Human Activity Recognition from IMU Sensors {.cv-entry}
+
+::: {.cv-meta}
+Python, PyTorch, Scikit-learn · MSc thesis, UOC · 2026
+:::
+
+- Activity classification from accelerometer and gyroscope time series:
+  preprocessing, signal windowing and feature extraction.
+- Benchmarking of classical models against neural network architectures.
+
+### Alicante Housing Market Analysis {.cv-entry}
+
+::: {.cv-meta}
+Python, Pandas, SQL, Selenium, Scikit-learn · 2026 ·
+[Zenodo](https://zenodo.org/doi/10.5281/zenodo.17583274)
+:::
+
+- End-to-end data pipeline on 1,802 property listings: collection, cleaning,
+  geocoding and geospatial enrichment.
+- Market segmentation into price clusters and identification of the key drivers
+  of property value.
+- Released as an open dataset with a DOI.
+
+### ED-Alert {.cv-entry}
+
+::: {.cv-meta}
+Python, Pandas, Scikit-learn, Tableau · 2026 ·
+[Tableau Public](https://public.tableau.com/app/profile/jordi.sanjuan.jover/viz/PR2_Visualizacion-ED_Alert/Historia1)
+:::
+
+- Analysis of early school leaving across Spanish regions and against Europe
+  (ELET indicator), combined with PISA 2022 data.
+- Identification of the strongest predictors of dropout risk using Random
+  Forest, and detection of natural student groupings with MCA.
+- Interactive Tableau visualisation for vocational-training guidance counsellors.
+
+## Experience
+
+### Vocational Education Teacher, Healthcare {.cv-entry}
+
+::: {.cv-meta}
+Generalitat Valenciana · Valencia, Spain · October 2022 – August 2026
+:::
+
+- Designed and led a teaching innovation project connecting the healthcare
+  vocational curriculum with the working environment. Coordinated a five-person
+  working group; over 100 students took part in its first year.
+- Technical communication of complex content to non-specialist audiences.
+- Group management and assessment based on performance indicators.
+
+### Sports Physiotherapist {.cv-entry}
+
+::: {.cv-meta}
+Club Bàsquet Alginet, LEB Plata · Alginet, Spain · September 2019 – May 2024
+:::
+
+- Head of the physiotherapy area, managing one physiotherapist and interns.
+- Built an injury recovery tracking system in Excel — structured intake forms
+  for athletes and a reporting dashboard for the coaching staff — reaching 100%
+  squad availability in the 2020–21 season and over 90% in the following ones.
+- Decision-making and communication within a multidisciplinary performance team
+  of coaching staff, strength and conditioning, and medical services.
+
+### Sports Physiotherapist {.cv-entry}
+
+::: {.cv-meta}
+Club Handbol Canyamelar (Liga Guerreras Iberdrola) and Club Bàsquet Claret
+(Liga Femenina 2), 2018–2019 · Tatami Rugby Club (División de Honor B), 2014–2016
+:::
+
+- Full squad coverage at three clubs competing in national leagues: systematic
+  injury logging and weekly availability tracking.
+
+### Clinical Physiotherapist {.cv-entry}
+
+::: {.cv-meta}
+Clínica Axis, Cabinet Paramédical Linet and Corpo Sano Fisioterapia ·
+Valencia, Spain and Épernon, France · 2014–2022
+:::
+
+- Autonomous management of a caseload of 120 patients.
+- Two years practising in France, working entirely in French.
+
+## Education
+
+### MSc in Data Science {.cv-entry}
+
+::: {.cv-meta}
+Universitat Oberta de Catalunya · September 2025 – December 2026 · GPA 7.4/10
+:::
+
+### BSc in Physiotherapy {.cv-entry}
+
+::: {.cv-meta}
+Universitat de València · 2010–2014 · GPA 7.49/10
+:::
+
+### Certifications {.cv-entry}
+
+- Google Project Management Professional Certificate — Coursera, 2026
+
+### Further postgraduate study {.cv-entry}
+
+- MSc in Sports Physiotherapy and Return to Play — Universitat Autònoma de
+  Barcelona, 2019–2020
+- MSc in Secondary Education Teaching — Universitat de València, 2018–2019
+
+## Languages
+
+**Spanish** and **Valencian** native · **French** C1 equivalent ·
+**English** B2, Pearson Certificate

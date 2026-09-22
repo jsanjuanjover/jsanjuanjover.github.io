@@ -1,0 +1,63 @@
+---
+title: "Jordi Sanjuan Jover"
+subtitle: "Data Scientist · applied machine learning and deep learning"
+page-layout: full
+toc: false
+about:
+  template: trestles
+  image: assets/profile-placeholder.svg
+  image-width: 14em
+  image-shape: rounded
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/jsanjuanjover
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/jsanjuanj
+    - icon: envelope
+      text: Email
+      href: "mailto:j.sanjuanjover@gmail.com"
+    - icon: file-earmark-text
+      text: CV
+      href: cv.qmd
+listing:
+  - id: recent-posts
+    contents: blog/posts
+    type: default
+    max-items: 3
+    sort: "date desc"
+    fields: [date, title, description]
+---
+
+I am a data scientist based in Valencia, Spain, finishing an MSc in Data Science
+at the Universitat Oberta de Catalunya. I work on applied machine learning and
+deep learning: predictive models on educational data, an open housing dataset
+published with a DOI, and human activity recognition from sensor time series.
+
+Before data, I spent ten years as a physiotherapist and a vocational teacher,
+turning complex information into decisions for people without a technical
+background — in clinics, in professional sport and in the classroom. That is
+still the part of the work I care about most: a model nobody can act on is not
+finished.
+
+## Selected projects
+
+[**Alicante Housing Market Analysis**](projects/alicante-housing/index.qmd) —
+an end-to-end pipeline over 1,802 property listings, from scraping to
+geospatial enrichment, gradient boosting with SHAP and hypothesis testing.
+Released as an open dataset with a DOI.
+
+[**ED-Alert**](projects/ed-alert/index.qmd) — early school leaving across
+Spanish regions against the European ELET indicator, combined with PISA 2022
+data to surface the strongest predictors of dropout risk. Delivered as an
+interactive Tableau story for guidance counsellors.
+
+[See all projects →](projects/index.qmd)
+
+## Latest posts
+
+::: {#recent-posts}
+:::
+
+[Read the blog →](blog/index.qmd)

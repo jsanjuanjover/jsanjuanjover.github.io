@@ -1,0 +1,13 @@
+---
+title: "Blog"
+subtitle: "Notes on how I build things — mostly data, mostly with the code included."
+listing:
+  contents: posts
+  type: default
+  sort: "date desc"
+  categories: true
+  feed: true
+  fields: [date, title, description, categories, reading-time]
+  date-format: "D MMMM YYYY"
+toc: false
+---

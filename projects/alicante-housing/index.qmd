@@ -1,0 +1,78 @@
+---
+title: "Alicante Housing Market Analysis"
+description: >
+  An end-to-end pipeline over 1,802 property listings — scraping, geocoding,
+  gradient boosting with SHAP and hypothesis testing — released as an open
+  dataset with a DOI.
+date: 2026-05-26
+categories: [Python, XGBoost, SHAP, Geospatial, Web scraping, Open data]
+---
+
+::: {.project-links}
+[Repository](https://github.com/jsanjuanjover/alicante-housing-market-analysis){.btn .btn-outline-primary .btn-sm}
+[Dataset (DOI)](https://doi.org/10.5281/zenodo.17583274){.btn .btn-outline-primary .btn-sm}
+:::
+
+## The question
+
+What actually drives housing prices in Alicante — size, location, or amenities?
+Everyone has an intuition about this; few have the numbers. I wanted an answer
+that came out of data I had collected myself, and that could be checked by
+anyone else.
+
+## The data
+
+There was no ready-made dataset, so the project starts one step earlier than
+usual: collecting it. I scraped 1,802 listings from Idealista, Spain's largest
+property portal, capturing eleven variables per listing — price, property type,
+surface area, rooms, floor, agency, and the amenities that agents advertise
+(garage, sea views, elevator, terrace).
+
+Addresses on a property portal are deliberately vague, so location had to be
+reconstructed: each listing was geocoded through Nominatim (OpenStreetMap),
+resolving roughly 87% of them to coordinates. That step is what turned
+"location" from a text field into something a model could use.
+
+The result is published on Zenodo under CC BY-NC-SA 4.0, with a DOI, so the
+analysis below can be reproduced rather than taken on trust.
+
+## The method
+
+The pipeline runs in six stages: scraping with Selenium, cleaning and outlier
+handling in Pandas, geospatial enrichment with geopy, unsupervised exploration
+with UMAP, supervised modelling with XGBoost, and formal hypothesis testing.
+
+Two choices are worth explaining. **SHAP** was used on top of XGBoost because a
+price model that cannot say *why* it predicts a price is useless for the people
+asking the question. And the amenity claims were put through **Mann-Whitney U**
+rather than a t-test, because property prices are heavily skewed and do not meet
+the normality assumption — a detail that quietly invalidates a lot of published
+property analysis.
+
+## What came out
+
+Surface area dominates, as expected, but not by as much as the market narrative
+suggests:
+
+| Factor | SHAP importance | Reading |
+|---|---|---|
+| Surface area (m²) | 0.31 | The strongest single predictor |
+| Latitude | 0.13 | Proximity to the coast pushes price up |
+| Longitude | 0.13 | East-facing locations command a premium |
+| Elevator | 0.08 | Significant positive effect |
+| Sea views | 0.08 | Significant positive effect |
+
+Taken together, the two geographic coordinates carry about as much weight as
+surface area — location is not a tiebreaker in this market, it is a primary
+driver.
+
+On amenities, listings with a garage are systematically priced higher
+(Mann-Whitney U, p ≈ 0.000), and the effect holds independently of the other
+features. UMAP clustering separated the market into distinct segments by
+property type and geographic zone, which is the part a buyer or an agency would
+use in practice: the city is not one market but several.
+
+## Stack
+
+Python · Selenium · Pandas · NumPy · geopy/Nominatim · Scikit-learn · XGBoost ·
+SHAP · UMAP · SciPy · Matplotlib · Seaborn · Git
