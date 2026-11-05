@@ -1,0 +1,16 @@
+// Cloudflare Workers configuration, read by `wrangler deploy` in CI.
+// The site is purely static: Quarto renders it into _site/ and Cloudflare
+// serves those files as-is. There is no Worker script.
+{
+  // Worker name in the Cloudflare dashboard and in the *.workers.dev URL.
+  "name": "jsanjuanjover",
+
+  // Pins the Workers runtime behaviour to this date, so a Cloudflare update
+  // cannot change how the site is served. Bump it deliberately, never by habit.
+  "compatibility_date": "2026-11-01",
+
+  // Static assets: everything in _site/ is uploaded and served directly.
+  "assets": {
+    "directory": "./_site"
+  }
+}

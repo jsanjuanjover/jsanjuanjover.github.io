@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build-deploy:
@@ -24,9 +24,12 @@ jobs:
       # in _freeze/, so the renderer never runs code on CI — which keeps builds
       # fast and stops a library upgrade on the runner from changing published
       # results. Re-execution happens locally, on `quarto render`.
-      - name: Render and publish to gh-pages
-        uses: quarto-dev/quarto-actions/publish@v2
+      - name: Render site
+        uses: quarto-dev/quarto-actions/render@v2
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
         with:
-          target: gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
