@@ -18,7 +18,7 @@ lang: en
 website:
   title: "Jordi Sanjuan Jover"
   description: "Data Scientist working on applied machine learning and deep learning."
-  site-url: "https://jsanjuanjover.github.io"
+  site-url: "https://jsanjuanjover.com"
   favicon: assets/favicon.svg
   open-graph: true
   twitter-card: true
