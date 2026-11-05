@@ -1,9 +1,9 @@
-# jsanjuanjover.github.io
+# jsanjuanjover.com
 
-Personal site, CV and blog. Built with [Quarto](https://quarto.org), published to
-GitHub Pages.
+Personal site, CV and blog. Built with [Quarto](https://quarto.org), served by
+Cloudflare Workers.
 
-Live at <https://jsanjuanjover.github.io>.
+Live at <https://jsanjuanjover.com>.
 
 ## Local setup
 
@@ -73,54 +73,51 @@ Edit `cv.qmd` only. Both outputs update on the next render.
 
 ## Deployment
 
-`.github/workflows/publish.yml` runs on every push to `main`: it installs
-Quarto, renders, and pushes the result to the `gh-pages` branch, which Pages
-serves. Nothing needs to be built by hand.
+`.github/workflows/publish.yml` runs on every push to `main`:
 
----
+1. Installs Quarto (pinned version) and renders the site into `_site/`.
+2. Runs `wrangler deploy`, which reads `wrangler.jsonc` and uploads `_site/` to
+   the `jsanjuanjover` Worker as static assets. There is no Worker script.
 
-## Moving to a custom domain
+Nothing needs to be built by hand. The deploy needs two repository secrets
+(Settings → Secrets and variables → Actions):
 
-When the domain is bought, three steps:
+- `CLOUDFLARE_API_TOKEN` — created from the *Edit Cloudflare Workers* template,
+  scoped to this account and zone. Never commit it.
+- `CLOUDFLARE_ACCOUNT_ID`
 
-1. **DNS at the registrar.** For an apex domain (`jsanjuan.dev`), create four
-   `A` records pointing at GitHub's Pages IPs (`185.199.108.153`,
-   `185.199.109.153`, `185.199.110.153`, `185.199.111.153`), plus a `CNAME`
-   record for `www` pointing at `jsanjuanjover.github.io.`.
-2. **In this repo.** Settings → Pages → Custom domain. GitHub writes a `CNAME`
-   file to the `gh-pages` branch. Wait for the certificate, then tick *Enforce
-   HTTPS*.
-3. **Update `site-url`** in `_quarto.yml`, or Open Graph previews and the
-   sitemap will keep pointing at the old address.
+Wrangler is pinned in the workflow (`wranglerVersion`). The action's default is
+an old Wrangler 3 that cannot deploy an assets-only Worker, so do not drop the
+pin; bump it deliberately.
 
-### Verify the domain on GitHub
+## Domain and DNS
 
-Do this as soon as the domain is bought: Settings → Pages → Verify domain adds a
-`_github-pages-challenge-jsanjuanjover` TXT record. Until it is verified, anyone
-with a GitHub account can claim an unused subdomain of your domain that points
-at Pages. It costs one DNS record.
+The domain is registered at Cloudflare and its DNS lives there too.
+
+- **`jsanjuanjover.com`** is attached to the Worker as a *Custom domain*
+  (Worker → Settings → Domains & Routes). Cloudflare manages the DNS record and
+  the certificate.
+- **`www.jsanjuanjover.com`** is not attached to the Worker. A proxied DNS record
+  plus a Redirect Rule (`https://www.jsanjuanjover.com/*` →
+  `https://jsanjuanjover.com/${1}`, 301) sends it to the apex, so there is a
+  single canonical URL.
+- **Always Use HTTPS** is on (SSL/TLS → Edge Certificates).
+- `site-url` in `_quarto.yml` must match the domain, or Open Graph previews and
+  the sitemap point at the wrong address.
 
 ## Client subdomains
 
-For `client-x.jsanjuan.dev`, one repository per client:
+Every subdomain of `jsanjuanjover.com` is free to use. For `client-x`, one
+repository per client, each with its own Worker:
 
-1. DNS: a `CNAME` record for `client-x` pointing at `jsanjuanjover.github.io.`
-2. In the client repo: Settings → Pages → Custom domain `client-x.jsanjuan.dev`.
+1. Copy `wrangler.jsonc` and the workflow, changing `name` to the client's
+   Worker name.
+2. Attach `client-x.jsanjuanjover.com` to that Worker as a Custom domain.
 
-Subdomains of the same domain can live in different repositories without
-conflicting with this site. Two limits worth knowing before promising anything
-to a client:
+Use a separate API token per project, scoped to the account and zone it needs,
+so a leaked token cannot touch other sites.
 
-- **Wildcards do not exist on GitHub Pages.** Every subdomain needs its own DNS
-  record and its own repository. Fine for a handful of clients, tedious at scale.
-- **A Pages site is always public**, even when its repository is private — and
-  Pages on a private repository requires GitHub Pro. There is no password
-  protection.
-
-### When a client site must not be public
-
-Use [Cloudflare Pages](https://pages.cloudflare.com/) instead: private
-repositories at no cost, wildcard subdomains, and access control on preview
-deployments. Quarto output is plain static HTML, so the same `_site/` deploys
-there unchanged — only the workflow differs. The personal site can stay on
-GitHub Pages regardless.
+A site that must not be public can be put behind a login with Cloudflare Access
+(Zero Trust, free for small teams). Private repositories cost
+nothing extra: the build runs in GitHub Actions and only the output reaches
+Cloudflare.
