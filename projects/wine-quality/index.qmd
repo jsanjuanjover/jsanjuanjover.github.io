@@ -1,0 +1,15 @@
+---
+title: "Wine Quality Analysis"
+description: >
+  Una o dos frases: qué pregunta respondes y con qué. Es lo que se ve en el
+  listado de proyectos y en la vista previa al compartir.
+date: 2026-11-05
+categories: [Python, Linear Regression, Logistic Regression, Classification]
+---
+
+::: {.project-links}
+[Repository](https://github.com/jsanjuanjover/wine-quality){.btn .btn-outline-primary .btn-sm}
+[Dataset](https://archive.ics.uci.edu/dataset/186/wine+quality){.btn .btn-outline-primary .btn-sm}
+:::
+
+## The question
