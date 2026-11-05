@@ -1,11 +1,11 @@
 ---
 title: "Jordi Sanjuan Jover"
-subtitle: "Data Scientist · applied machine learning and deep learning"
+subtitle: "Data Scientist · Data Analyst"
 page-layout: full
 toc: false
 about:
   template: trestles
-  image: assets/profile-placeholder.svg
+  image: assets/profile.png
   image-width: 14em
   image-shape: rounded
   links:
@@ -14,10 +14,10 @@ about:
       href: https://github.com/jsanjuanjover
     - icon: linkedin
       text: LinkedIn
-      href: https://www.linkedin.com/in/jsanjuanj
+      href: https://www.linkedin.com/in/jsanjuanjover
     - icon: envelope
       text: Email
-      href: "mailto:j.sanjuanjover@gmail.com"
+      href: "mailto:jsanjuanjover@gmail.com"
     - icon: file-earmark-text
       text: CV
       href: cv.qmd
