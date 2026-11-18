@@ -1,0 +1,245 @@
+---
+title: "Univariate Analysis: The Step I Struggled With Most"
+description: >
+  A checklist and a few Python functions so you don't skip the details that
+  matter later: typing variables, skew, outliers and class balance.
+date: 2026-11-18
+categories: [Python, pandas, EDA, Statistics]
+include-after-body:
+  text: <script src="/assets/quiz.js"></script>
+---
+
+When I started in data science, univariate analysis was one of the things I struggled with most. There are a lot of details to keep in mind, and depending on the nature of each variable and how you interpret it, they shape everything you do later in modeling. This is the guide I use now.
+
+## Why `describe()` isn't enough
+
+During the first structural check of a dataset, `df.describe()` falls short. And if you jump straight into histograms or bar charts without thinking first about what each variable is, you lose a lot of context.
+
+`describe()` will happily give you a mean of 5.8 for a quality score from 3 to 9, as if 5.8 were a real grade.
+
+## What to check in a univariate analysis
+
+### For every variable
+
+1. **Basic quality:** number of observations, missing values (how many, and whether there's a pattern), impossible or unexpected values (negatives, misspelled categories, codes like `-999`).
+2. **Domain:** observed range vs. possible range, and units.
+3. **Central tendency and spread:** the "typical" value and how much it varies.
+4. **Shape:** concentrated or spread out, symmetric or skewed, one peak or several.
+5. **Tails and rare values:** outliers, very infrequent categories.
+6. **What it means for modeling:** the transformation, grouping or missing-value treatment you'd consider (as a decision, not applied yet).
+
+### What changes by type
+
+| Type | Statistics | Plot | Watch out for |
+|---|---|---|---|
+| Continuous | mean, median, std, quantiles, skewness, kurtosis | histogram + density, boxplot | outliers, need for a transform (log), zeros or caps |
+| Discrete (counts) | same as continuous, plus frequencies | bar chart or discrete histogram | overdispersion, excess zeros |
+| Nominal | counts and %, mode, number of categories | bars sorted by frequency | rare categories, imbalance, high cardinality |
+| Ordinal | counts in order, cumulative %, median, mode | bars in natural order | don't assume equal distances; mean only as a complement |
+| Binary | proportion of each class | bar chart or a single number | imbalance |
+| Date | range, gaps, frequency | time series | seasonality, gaps |
+
+### The target variable
+
+On top of all this, the target needs extra attention. Check how its classes are distributed (counts and % per class), especially if they're imbalanced. Otherwise, when you evaluate the model, good performance on one class can hide poor predictions on another. More on that in a future post about the confusion matrix.
+
+## Some of the functions I use
+
+Here are some of the functions I use. They cover the three types I run into most often: continuous, binary and ordinal. The examples use the Wine Quality dataset.
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import display
+
+def _header(s, kind):
+    print(f"── {s.name} · {kind} ──  n = {s.notna().sum()}   missing = {s.isna().sum()}")
+```
+
+### Continuous: summary, skew and two plots
+
+The histogram shows the mean and the median together. If they drift apart, the variable is skewed.
+
+```python
+def univ_continuous(s, bins=30):
+    _header(s, "continuous")
+    x = s.dropna().astype(float)
+    summary = x.describe()
+    summary["skew"] = x.skew()
+    summary["kurtosis"] = x.kurt()
+    display(summary.round(4).to_frame())
+
+    fig, ax = plt.subplots(1, 2, figsize=(11, 3.5))
+    ax[0].hist(x, bins=bins)
+    ax[0].axvline(x.mean(), color="tab:red", ls="--", label="mean")
+    ax[0].axvline(x.median(), color="black", ls=":", label="median")
+    ax[0].legend(); ax[0].set_title(f"{s.name}: histogram")
+    ax[1].boxplot(x, orientation="horizontal"); ax[1].set_title(f"{s.name}: boxplot")
+    fig.tight_layout()
+    plt.show()
+```
+
+### Outliers with the IQR rule
+
+Tukey's rule: anything below Q1 − 1.5·IQR or above Q3 + 1.5·IQR gets flagged.
+
+```python
+def iqr_outliers(s, k=1.5):
+    x = s.dropna().astype(float)
+    q1, q3 = x.quantile([0.25, 0.75])
+    iqr = q3 - q1
+    low, high = round(q1 - k * iqr, 10), round(q3 + k * iqr, 10)  # avoids 9.9 showing as 9.8999…
+    n_low, n_high = (x < low).sum(), (x > high).sum()
+    return pd.Series({
+        "IQR": iqr,
+        "lower limit": low, "upper limit": high,
+        "outliers low": n_low, "outliers high": n_high,
+        "% outliers": round((n_low + n_high) / len(x) * 100, 2),
+    }, name=s.name).round(5)  # 5 decimals: with round(2), variables like density would show 0.0
+```
+
+Two small details there cost me some time: floating-point noise in the limits, and rounding that turned `density` into zeros.
+
+#### Outliers: flag first, decide later
+
+The IQR rule only flags candidates. Before doing anything, check where they come from: a real error (a typo, a `-999` code) or values that are extreme but legitimate. In the first case you fix or remove them. In the second, removing them throws away real information; if the variable is right-skewed, a log transform (`np.log1p` if there are zeros) often reduces the skew without losing any data.
+
+A useful check: apply the IQR rule again after the log. Whatever still gets flagged is more likely to be a genuine error.
+
+### Binary: counts and proportions
+
+If it doesn't find exactly two categories, it warns you. That's usually a cleaning problem, like `"white"` and `"White "`.
+
+```python
+def univ_binary(s):
+    _header(s, "binary")
+    freq = s.dropna().value_counts()
+    table = pd.DataFrame({"n": freq, "%": (freq / freq.sum() * 100).round(1)})
+    table.index.name = s.name
+    if len(freq) != 2:
+        print(f"warning: {len(freq)} categories (expected 2)")
+    display(table)
+
+    table["n"].plot.bar(title=f"{s.name}: counts", rot=0)
+    plt.show()
+```
+
+### Ordinal: order, cumulative % and median
+
+Categories stay in their natural order, and the median comes from the cumulative percentage.
+
+```python
+def univ_ordinal(s):
+    _header(s, "ordinal")
+    freq = s.value_counts().sort_index()
+    pct = freq / freq.sum()
+    table = pd.DataFrame({"n": freq, "%": (pct * 100).round(1), "cum %": (pct.cumsum() * 100).round(1)})
+
+    median = pct.index[(pct.cumsum() >= 0.5).argmax()]
+    print(f"median = {median}   mode = {freq.idxmax()}")
+    display(table)
+
+    table["n"].plot.bar(title=f"{s.name}: counts (in order)", rot=0)
+    plt.show()
+```
+
+### Using them
+
+```python
+df = pd.read_csv("winequalityN.csv")
+
+univ_continuous(df["residual sugar"])
+iqr_outliers(df["residual sugar"])
+univ_binary(df["type"])
+univ_ordinal(df["quality"])
+```
+
+## The tricky one: a number that isn't a number
+
+`quality` is stored as an integer, so pandas treats it as numeric. If you feed it to the continuous function, you get a mean, a skew value and a histogram that all look perfectly reasonable.
+
+Now run `iqr_outliers(df["quality"])`. With Q1 = 5 and Q3 = 6, the limits are 3.5 and 7.5, so every wine rated 3, 8 or 9 is flagged as an outlier. They aren't errors. They're just the less common grades.
+
+Treated as ordinal, the picture is honest: counts in order, a median of 6, and no pretending that the distance between a 5 and a 6 is the same as between an 8 and a 9.
+
+## Classic traps when typing your variables
+
+The dtype pandas gives you is a guess, not the truth. These are the ones that catch people most often:
+
+- **IDs and codes stored as numbers.** `customer_id` or a postal code look numeric, but their mean means nothing. They're identifiers or nominal categories.
+- **Continuous variables that look discrete.** Weight recorded in whole kilos is still continuous; the integers come from how it was measured, not from the variable itself. Cast it to `float` so it's treated that way.
+- **Ordinal variables stored as integers.** A quality score from 3 to 9 or a 1–5 Likert scale has an order, but the distances between levels aren't guaranteed to be equal.
+- **Categories encoded as numbers.** `1 = male, 2 = female` or `0/1` flags are categorical or binary, even if `describe()` gives you a mean.
+- **Numbers stored as text.** Decimal commas (`"1,5"`), units or symbols (`"12 kg"`, `"€30"`) turn a numeric column into `object`.
+- **Dates in disguise.** `20231105` as an integer or `"05/11/2023"` as a string. Parse them, or you lose range, gaps and seasonality.
+- **Sentinel values.** `-999` or `0` meaning "missing" quietly distort the mean and the range.
+
+## What I'd do differently
+
+If I started again, I'd decide the type of every variable before writing a single line of code. Most of my early mistakes in univariate analysis didn't come from the functions. They came from trusting the dtype and picking the wrong summary for the wrong kind of variable.
+
+## Wrapping up
+
+Univariate analysis isn't the boring step before modeling. It's where you find out what each variable really is, and that shapes every decision afterwards: which statistics make sense, which plots tell the truth, whether an outlier is an error or just an extreme value, and how your target will affect evaluation.
+
+The short version:
+
+- **Type first, function second.** The dtype is a guess.
+- **Continuous:** compare mean and median, check skew, and flag outliers before deciding anything.
+- **Discrete (counts):** look at the frequencies too, and watch for excess zeros.
+- **Nominal:** sort categories by frequency and spot the rare ones before they become a problem.
+- **Ordinal:** respect the order, use the median, and treat the mean as a complement at most.
+- **Binary and target:** look at class balance before you trust any metric.
+- **Date:** check the range and the gaps; a missing month is easy to miss in a table.
+
+What's the trap that has caught you most often when typing variables?
+
+*The repo with the notebook is still a work in progress, but you can follow it here: [wine-quality-manual](https://github.com/jsanjuanjover/wine-quality-manual).*
+
+## Quick quiz
+
+Want to check yourself? Four questions: pick an answer to see if you got it right.
+
+::: {.quiz}
+**1.** A variable has a mean of 12 and a median of 7. What does that suggest?
+
+- Symmetric distribution
+- [Right-skewed (long tail to the right)]{.correct}
+- Left-skewed
+- Nothing, you need the mode
+
+[The tail pulls the mean above the median.]{.explanation}
+:::
+
+::: {.quiz}
+**2.** The IQR rule flags 6% of `residual sugar` values as outliers. What's your first step?
+
+- Remove them
+- Replace them with the median
+- [Check whether they're errors or legitimate extreme values]{.correct}
+- Lower k to 1
+
+[Flagged doesn't mean wrong.]{.explanation}
+:::
+
+::: {.quiz}
+**3.** A `postal_code` column is stored as `int64`. What type of variable is it?
+
+- Continuous
+- Discrete count
+- [Nominal]{.correct}
+- Ordinal
+
+[It's an identifier, so its mean is meaningless.]{.explanation}
+:::
+
+::: {.quiz}
+**4.** For a quality score from 3 to 9, which is the most appropriate measure of central tendency?
+
+- Mean
+- [Median]{.correct}
+- Standard deviation
+- Kurtosis
+
+[It respects the order without assuming equal distances.]{.explanation}
+:::
