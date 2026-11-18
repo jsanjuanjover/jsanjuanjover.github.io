@@ -6,6 +6,9 @@ project:
   render:
     - "**/*.qmd"
     - "!data/**"
+  # Loaded by posts through a <script> tag, so Quarto can't detect it.
+  resources:
+    - assets/quiz.js
 
 # Executed code is frozen into _freeze/ and committed, so CI renders the site
 # without needing Python, the data, or matching library versions.
