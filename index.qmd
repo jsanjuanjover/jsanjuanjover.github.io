@@ -5,7 +5,7 @@ page-layout: full
 toc: false
 about:
   template: trestles
-  image: assets/profile.png
+  image: assets/profile.jpeg
   image-width: 14em
   image-shape: rounded
   links:
